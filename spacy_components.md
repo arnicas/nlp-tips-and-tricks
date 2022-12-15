@@ -2,6 +2,7 @@
 
 # SpaCy Tricks and Examples
 
+Way more coming..!
 
 
 Unpossess entities -- remove 's and ' at end of entity:
