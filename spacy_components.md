@@ -7,7 +7,7 @@ Way more coming..!  I'm documenting for myself too.
 
 ## Entity Rules 
 
-[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019)).
+[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
 
 [SpaCy docs on the Entity Ruler](https://spacy.io/usage/rule-based-matching#entityruler) which is how I overrode names of porn actors in my classifier example.
 
