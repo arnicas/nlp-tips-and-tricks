@@ -2,11 +2,23 @@
 
 # SpaCy Tricks and Examples
 
+Way more coming..!  I'm documenting for myself too.
+
+
+## Entity Rules 
+
+[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019)).
+
+[SpaCy docs on the Entity Ruler](https://spacy.io/usage/rule-based-matching#entityruler) which is how I overrode names of porn actors in my classifier example.
+
+## Coreference Model
+
+Still in experimental, it seems to me pretty good. Stay tuned for more on using this.
 
 Merging coreference entities in spacy (a fast hack but useful: "This code snippet shows how to use spaCy's coreference resolution component to resolve references in text. The function shown below is a simple approach and does not support cases like overlapping spans."): [link](https://gist.github.com/thomashacker/b5dd6042c092e0a22c2b9243a64a2466)
 
 
-Way more coming..!
+## Useful Pipeline Components Code
 
 Combine acronym in parens with an entity before it for org names - this looks very hacky, I know:
 
@@ -27,9 +39,6 @@ def combine_acronym_parens(doc):
     doc.ents = filter_spans(new_ents)  # takes largest enclosing span
     return doc
 ```
-
-
-
 
 
 Unpossess entities -- remove 's and ' at end of entity:
@@ -82,6 +91,9 @@ def remove_uncap_the(doc):
     return doc
 ```
 
+
+## Using Transformers Models in Unorthodox Ways
+
 Transformers Component in spacy pipeline, code from MS's [Presidio Project](https://github.com/microsoft/presidio), for de-identifying PII:
 
 ```
@@ -120,7 +132,74 @@ class TransformersComponent:
 
 ```
 
-How to use it:
+How to use it-- this is a complex example that does work.  Thanks to MS Presidio project for this example of how to do this.
+
+```
+
+@Language.factory(
+    "tranformers-ner",
+    default-config={"pretrained-model-or-path": "dslim/bert-base-NER"},
+)
+def create_transformer_model(nlp, name, pretrained_model_name_or_path: str):
+    return TransformersComponent(pretrained_model_or_path=pretrained_model_or_path)
+
+nlp = spacy.load("en_coreference_web_trf")
+nlp.add_pipe("combine_corefs")
+nlp.add_pipe("transformers-ner")
+nlp.add_pipe("combine_acronym_parens", after="transformers-ner")
+nlp.initialize()
+```
+Note after you do the "initialize" you can still add rules.  The rules will get WIPED OUT if you add them before the init, though.
+
+
+ 
+### Overriding a Textcat Classification With Entity Rules
+
+```
+from spacy.language import Language
+
+@Language.component("reset_textcat")
+def reset_textcat(doc):
+    for ent in doc.ents:
+        if ent.label_ == "PORN_PERSON":
+            doc.cats = {'POSITIVE': 1, 'NEGATIVE': 0}
+    return doc
+
+nlp = spacy.load('en_core_web_trf')  # textcat wants transformers pipeline
+mytextcat = spacy.load("trained-textcat/model-best")  # load your model
+nlp.add_piple("textcat", source=mytextcat)  # trained model here, before entity ruler
+
+# the entity ruler is a set of porn names you've researched - you can load better, but 2 examples:
+
+ruler = nlp.add_pipe("entity_ruler", after="ner", config = {"overwrite_ents": True})
+
+patterns = [{"label": "PORN_PERSON", "pattern": [{"LOWER": "lanna"}, {"LOWER": "rhoades"}]},
+            {"label": "PORN_PERSON", "pattern": [{"LOWER": "mia"}, {"LOWER": "khalifa"}]}]
+ruler.add_patterns(patterns)  # don't forget to add the rules! 
+
+nlp.add_pipe("reset_textcat", last=True)  # add your override componenent!
+```
+Now you can test it:
+
+```
+doc = nlp("Having coffee with Mia Khalifa in the coffe shop in London, style of Alphonse Mucha")
+print("nsfw classification:", doc.cats)
+for ent in doc.ents:
+    print(ent, ent.label_)
+porn classification: {'POSITIVE': 1, 'NEGATIVE': 0}
+Mia Khalifa PORN_PERSON
+London GPE
+Alphonse Mucha PERSON
+
+doc = nlp("Having coffee with Mia Farrow in a coffe shop in London, style of Artgerm")
+
+{'POSITIVE': 0.33414962887763977, 'NEGATIVE':0.6658503413200378}
+Mia Farrow PERSON
+London GPE
+Artgerm PERSON
+```
+
+
 
 
 
