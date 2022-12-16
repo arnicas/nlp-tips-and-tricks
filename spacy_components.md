@@ -125,6 +125,8 @@ How to use it:
 
 
 
+
+
 ### SpaCy Resource Links
 
 
@@ -134,4 +136,6 @@ How to use it:
 * The gigantic scary [flowchart of NER workflow decision points](https://github.com/explosion/assets/blob/main/Prodigy/Prodigy_NER_flowchart_v2_0_0_light.pdf) which is very useful
 * [Prodigy](https://prodi.gy/), their customizable labeling tool with an active Support forum and integration with spaCy
 * The [Advanced SpaCy online web course](https://course.spacy.io/en/) (which I should redo)
-* Tailored analysis/pipelines and [consulting help](https://explosion.ai/custom-solutions) -- this is a thing I would use myself, they are nice (link)
+* Tailored analysis/pipelines and [consulting help](https://explosion.ai/custom-solutions) -- this is a thing I would use myself, they are nice (link)\
+
+[Making the Most of Spacy's Rule-Based Matcher](https://pmbaumgartner.github.io/blog/spacy-rule-based-matcher-workflow/), by Peter Baumgartner
