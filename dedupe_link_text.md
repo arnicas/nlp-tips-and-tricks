@@ -15,8 +15,9 @@ A [repo by heathersherry with links on Entity Resolution, Matching, and Alignmen
 
 [code used by BigScience team](https://github.com/bigscience-workshop/data-preparation/blob/main/preprocessing/training/01b_oscar_cleaning_and_filtering/deduplicate/self_deduplicate.py)
 
-Want to replace string equivalents to normalize your strings, efficiently?  I like [FlashText](https://github.com/vi3k6i5/flashtext).
+[Record Linkage Resources](https://github.com/ropeladder/record-linkage-resources) - ropeladder list of resources
 
+Want to replace string equivalents to normalize your strings, efficiently?  I like [FlashText](https://github.com/vi3k6i5/flashtext).
 
 
 

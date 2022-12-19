@@ -201,6 +201,11 @@ Artgerm PERSON
 
 
 
+## Training A TextCat Model
+
+* [Example doing it in code loop](https://github.com/jupyter-naas/awesome-notebooks/blob/1a6cc24f0777e5d951ce94aebe0c5dbd470e7880/spaCy/SpaCy_Build_a_sentiment_analysis_model_using_Twitter.ipynb) via juypyter-naas awesome-notebooks
+* 
+
 
 
 

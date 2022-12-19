@@ -10,6 +10,10 @@ This repo is a WIP!  I'm moving things into it :)
 
 Check [here](dedupe_link_text.md).
 
+## Text Data Cleaning Links
+
+Page started [here](text_cleaning.md).
+
 
 ## Code samples for spaCy stuff
 
@@ -30,6 +34,7 @@ There is even a spaCy project example.
 
 [Argilla](https://github.com/argilla-io/argilla) (formerly Rubrix): I like the elastic-search-based rule creation process, it's fast.
 
+[Snorkel](https://www.snorkel.org/use-cases/01-spam-tutorial) -- but the project has turned into a company and so the docs are a bit all over
 
 
 
