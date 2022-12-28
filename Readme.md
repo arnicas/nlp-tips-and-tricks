@@ -1,9 +1,13 @@
 
+# NLP Tips and Tricks
+
 ## Talk slides from NormConf
 
-This repo is a WIP!  I'm moving things into it :) 
+This repo is a WIP!  I'm moving things into it :) It started from a talk I gave at Normconf on NLP tips and tricks, based on some recent client projects (but I mostly used representative fake data in the talk).
 
+My talk slides are here:
 [https://ghostweather.slides.com/lynncherny/nlp-tips-tricks](https://ghostweather.slides.com/lynncherny/nlp-tips-tricks)
+The video (shorter than the slides, I didn't have time to cover it all) is [here](https://www.youtube.com/watch?v=Rs92i_xrBLo&t=2s).
 
 
 ## Deduping and Entity Resolution
@@ -15,7 +19,7 @@ Check [here](dedupe_link_text.md).
 Page started [here](text_cleaning.md).
 
 
-## Code samples for spaCy stuff
+## SpaCy and Code For It
 
 [spacy_samples](spacy_components.md)
 

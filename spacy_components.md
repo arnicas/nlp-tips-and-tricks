@@ -1,24 +1,35 @@
- 
+<!-- vscode-markdown-toc -->
+- [SpaCy Tricks and Examples](#spacy-tricks-and-examples)
+  - [Useful Pipeline Components Code](#useful-pipeline-components-code)
+    - [Acronym merge with Entity](#acronym-merge-with-entity)
+    - [Unpossess Entities](#unpossess-entities)
+  - [Using Transformers Models in Unorthodox Ways](#using-transformers-models-in-unorthodox-ways)
+    - [Overriding a Textcat Classification With Entity Rules](#overriding-a-textcat-classification-with-entity-rules)
+  - [Training SpaCy TextCat Models](#training-spacy-textcat-models)
+    - [Examples in the Wild](#examples-in-the-wild)
+    - [Official spaCy/Explosion content](#official-spacyexplosion-content)
+  - [Entity Rules](#entity-rules)
+  - [Coreference Model](#coreference-model)
+    - [Merge Coref Ents in Spacy](#merge-coref-ents-in-spacy)
+    - [Pipeline function to add corefs to the Doc](#pipeline-function-to-add-corefs-to-the-doc)
+  - [SpaCy Resource Links](#spacy-resource-links)
+    - [SpaCy articles of use to me](#spacy-articles-of-use-to-me)
+
+<!-- vscode-markdown-toc-config
+	numbering=false
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
 # SpaCy Tricks and Examples
 
-Way more coming..!  I'm documenting for myself too.
+A growing list of useful links and tips.
 
 
-## Entity Rules 
-
-[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
-
-[SpaCy docs on the Entity Ruler](https://spacy.io/usage/rule-based-matching#entityruler) which is how I overrode names of porn actors in my classifier example.
-
-## Coreference Model
-
-Still in experimental, it seems to me pretty good. Stay tuned for more on using this.
-
-Merging coreference entities in spacy (a fast hack but useful: "This code snippet shows how to use spaCy's coreference resolution component to resolve references in text. The function shown below is a simple approach and does not support cases like overlapping spans."): [link](https://gist.github.com/thomashacker/b5dd6042c092e0a22c2b9243a64a2466)
+## <a name='UsefulPipelineComponentsCode'></a>Useful Pipeline Components Code
 
 
-## Useful Pipeline Components Code
+### Acronym merge with Entity
 
 Combine acronym in parens with an entity before it for org names - this looks very hacky, I know:
 
@@ -40,8 +51,9 @@ def combine_acronym_parens(doc):
     return doc
 ```
 
+### Unpossess Entities
 
-Unpossess entities -- remove 's and ' at end of entity:
+Unpossess entities -- remove 's and ' at end of entity. Tokenization issue in default trf spacy model.
 
 ```
 @Language.component("unpossess_entities")
@@ -57,22 +69,7 @@ def unpossess_entities(doc):
     return doc
 ```
 
-A function to add all the corefs from the experimental coref model to the doc in a pipeline
 
-```
-@Language.component("combine_corefs")
-def get_corefs(doc):
-    if not Doc.has_extension("corefs"):
-        Doc.set_extension("corefs", default=[], force=True)
-    clusters = []
-    for key, vals in doc.spans.items():
-        cluster = []
-        for val in vals:
-            cluster.append([val.text, val.start, val.end])
-        clusters.append(cluster)
-    doc._.corefs = clusters
-    return doc
-```
 
 Remove uncapped "the":
 
@@ -92,7 +89,7 @@ def remove_uncap_the(doc):
 ```
 
 
-## Using Transformers Models in Unorthodox Ways
+## <a name='UsingTransformersModelsinUnorthodoxWays'></a>Using Transformers Models in Unorthodox Ways
 
 Transformers Component in spacy pipeline, code from MS's [Presidio Project](https://github.com/microsoft/presidio), for de-identifying PII:
 
@@ -149,11 +146,11 @@ nlp.add_pipe("transformers-ner")
 nlp.add_pipe("combine_acronym_parens", after="transformers-ner")
 nlp.initialize()
 ```
-Note after you do the "initialize" you can still add rules.  The rules will get WIPED OUT if you add them before the init, though.
+Note that after you do the "initialize" you can still add rules.  The rules will get WIPED OUT if you add them before the init, though!  Hard won lessons.
 
 
  
-### Overriding a Textcat Classification With Entity Rules
+### <a name='OverridingaTextcatClassificationWithEntityRules'></a>Overriding a Textcat Classification With Entity Rules
 
 ```
 from spacy.language import Language
@@ -199,27 +196,67 @@ London GPE
 Artgerm PERSON
 ```
 
+## <a name='TrainingSpaCyTextCatModels'></a>Training SpaCy TextCat Models
 
-
-## Training A TextCat Model
+### <a name='ExamplesintheWild'></a>Examples in the Wild
 
 * [Example doing it in code loop](https://github.com/jupyter-naas/awesome-notebooks/blob/1a6cc24f0777e5d951ce94aebe0c5dbd470e7880/spaCy/SpaCy_Build_a_sentiment_analysis_model_using_Twitter.ipynb) via juypyter-naas awesome-notebooks
-* 
 
+### <a name='OfficialspaCyExplosioncontent'></a>Official spaCy/Explosion content
 
+You want to make sure you are looking at their [projects](https://github.com/explosion/projects) folder on github.
 
+* spaCy example project in [their demos](https://github.com/explosion/projects/tree/v3/pipelines/textcat_demo) - binary
+* [spaCy demo project for multilabel classification](https://github.com/explosion/projects/tree/v3/pipelines/textcat_multilabel_demo)
+* Tutorial on [labeling and classifying doc issues](https://github.com/explosion/projects/tree/v3/tutorials/textcat_docs_issues)
+* Tutorial on [sentiment classification with textcat](https://github.com/explosion/projects/tree/v3/tutorials/textcat_goemotions)
 
+## <a name='EntityRules'></a>Entity Rules 
 
+[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
 
-### SpaCy Resource Links
+* [SpaCy docs on the Entity Ruler](https://spacy.io/usage/rule-based-matching#entityruler) -- which is how I overrode names of porn actors in my classifier example.
+
+## <a name='CoreferenceModel'></a>Coreference Model
+
+Still in experimental, it seems to me pretty good. Stay tuned for more on using this. Blog post about it [here](https://explosion.ai/blog/coref).
+
+FYI, you need to look for it in spacy-experimental, under ["releases."](https://github.com/explosion/spacy-experimental/releases)
+
+### Merge Coref Ents in Spacy
+
+Merging coreference entities in spacy (a fast hack but useful: "This code snippet shows how to use spaCy's coreference resolution component to resolve references in text. The function shown below is a simple approach and does not support cases like overlapping spans."): [link](https://gist.github.com/thomashacker/b5dd6042c092e0a22c2b9243a64a2466)
+
+### Pipeline function to add corefs to the Doc
+
+A function to add all the corefs from the experimental coref model to the doc in a pipeline
+
+```
+@Language.component("combine_corefs")
+def get_corefs(doc):
+    if not Doc.has_extension("corefs"):
+        Doc.set_extension("corefs", default=[], force=True)
+    clusters = []
+    for key, vals in doc.spans.items():
+        cluster = []
+        for val in vals:
+            cluster.append([val.text, val.start, val.end])
+        clusters.append(cluster)
+    doc._.corefs = clusters
+    return doc
+```
+
+## <a name='SpaCyResourceLinks'></a>SpaCy Resource Links
 
 
 * [Website](https://spacy.io/usage)
 * [Github Discussions](https://github.com/explosion/spaCy/discussions) (this is key! with tags)
-* [Videos with lots of tutorial material](https://www.youtube.com/@ExplosionAI/videos)
+* [Videos with lots of tutorial material!](https://www.youtube.com/@ExplosionAI/videos) - both mainstream spaCy and prodigy
 * The gigantic scary [flowchart of NER workflow decision points](https://github.com/explosion/assets/blob/main/Prodigy/Prodigy_NER_flowchart_v2_0_0_light.pdf) which is very useful
 * [Prodigy](https://prodi.gy/), their customizable labeling tool with an active Support forum and integration with spaCy
 * The [Advanced SpaCy online web course](https://course.spacy.io/en/) (which I should redo)
 * Tailored analysis/pipelines and [consulting help](https://explosion.ai/custom-solutions) -- this is a thing I would use myself, they are nice (link)\
 
-[Making the Most of Spacy's Rule-Based Matcher](https://pmbaumgartner.github.io/blog/spacy-rule-based-matcher-workflow/), by Peter Baumgartner
+### <a name='SpaCyarticlesofusetome'></a>SpaCy articles of use to me
+
+* [Making the Most of Spacy's Rule-Based Matcher](https://pmbaumgartner.github.io/blog/spacy-rule-based-matcher-workflow/), by Peter Baumgartner
