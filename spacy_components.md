@@ -3,11 +3,12 @@
   - [Useful Pipeline Components Code](#useful-pipeline-components-code)
     - [Acronym merge with Entity](#acronym-merge-with-entity)
     - [Unpossess Entities](#unpossess-entities)
+    - [Remove uncapped "The"](#remove-uncapped-the)
   - [Using Transformers Models in Unorthodox Ways](#using-transformers-models-in-unorthodox-ways)
-    - [Overriding a Textcat Classification With Entity Rules](#overriding-a-textcat-classification-with-entity-rules)
-  - [Training SpaCy TextCat Models](#training-spacy-textcat-models)
+  - [SpaCy TextCat Models](#spacy-textcat-models)
     - [Examples in the Wild](#examples-in-the-wild)
     - [Official spaCy/Explosion content](#official-spacyexplosion-content)
+    - [Overriding a Textcat Classification With Entity Rules](#overriding-a-textcat-classification-with-entity-rules)
   - [Entity Rules](#entity-rules)
   - [Coreference Model](#coreference-model)
     - [Merge Coref Ents in Spacy](#merge-coref-ents-in-spacy)
@@ -29,7 +30,7 @@ A growing list of useful links and tips.
 ## <a name='UsefulPipelineComponentsCode'></a>Useful Pipeline Components Code
 
 
-### Acronym merge with Entity
+### <a name='AcronymmergewithEntity'></a>Acronym merge with Entity
 
 Combine acronym in parens with an entity before it for org names - this looks very hacky, I know:
 
@@ -51,7 +52,7 @@ def combine_acronym_parens(doc):
     return doc
 ```
 
-### Unpossess Entities
+### <a name='UnpossessEntities'></a>Unpossess Entities
 
 Unpossess entities -- remove 's and ' at end of entity. Tokenization issue in default trf spacy model.
 
@@ -69,6 +70,8 @@ def unpossess_entities(doc):
     return doc
 ```
 
+
+### Remove uncapped "The"
 
 
 Remove uncapped "the":
@@ -91,8 +94,11 @@ def remove_uncap_the(doc):
 
 ## <a name='UsingTransformersModelsinUnorthodoxWays'></a>Using Transformers Models in Unorthodox Ways
 
-Transformers Component in spacy pipeline, code from MS's [Presidio Project](https://github.com/microsoft/presidio), for de-identifying PII:
+An example of using a pre-trained HF transformers component in spacy pipeline, code from MS's [Presidio Project](https://github.com/microsoft/presidio), a project for de-identifying PII.
 
+This is unorthodox because a trained NER trf model doesn't have the correct final layer for working in a spacy pipeline - it has instead the entity labels. Basically you need to use it as a "stub" component that provides only those labels and info but nothing else.
+
+Code via MS Presidio proj:
 ```
 class TransformersComponent:
     """
@@ -129,7 +135,7 @@ class TransformersComponent:
 
 ```
 
-How to use it-- this is a complex example that does work.  Thanks to MS Presidio project for this example of how to do this.
+How to use it-- this is a complex example that does work, using both a coreference model and then a trained NER model in the same pipeline. The 'combine corefs' component puts a bunch of info on the doc object, and then you use the ner model, and can potentially add a component afterwords that uses both together, e.g., for name resolution.  I haven't gotten that to work well and I'm using crappy heuristics right now for names for one client.
 
 ```
 
@@ -149,7 +155,21 @@ nlp.initialize()
 Note that after you do the "initialize" you can still add rules.  The rules will get WIPED OUT if you add them before the init, though!  Hard won lessons.
 
 
- 
+## <a name='SpaCyTextCatModels'></a>SpaCy TextCat Models
+
+### <a name='ExamplesintheWild'></a>Examples in the Wild
+
+* [Example doing it in code loop](https://github.com/jupyter-naas/awesome-notebooks/blob/1a6cc24f0777e5d951ce94aebe0c5dbd470e7880/spaCy/SpaCy_Build_a_sentiment_analysis_model_using_Twitter.ipynb) via juypyter-naas awesome-notebooks
+
+### <a name='OfficialspaCyExplosioncontent'></a>Official spaCy/Explosion content
+
+You want to make sure you are looking at their [projects](https://github.com/explosion/projects) folder on github.
+
+* spaCy example project in [their demos](https://github.com/explosion/projects/tree/v3/pipelines/textcat_demo) - binary
+* [spaCy demo project for multilabel classification](https://github.com/explosion/projects/tree/v3/pipelines/textcat_multilabel_demo)
+* Tutorial on [labeling and classifying doc issues](https://github.com/explosion/projects/tree/v3/tutorials/textcat_docs_issues)
+* Tutorial on [sentiment classification with textcat](https://github.com/explosion/projects/tree/v3/tutorials/textcat_goemotions)
+
 ### <a name='OverridingaTextcatClassificationWithEntityRules'></a>Overriding a Textcat Classification With Entity Rules
 
 ```
@@ -196,21 +216,6 @@ London GPE
 Artgerm PERSON
 ```
 
-## <a name='TrainingSpaCyTextCatModels'></a>Training SpaCy TextCat Models
-
-### <a name='ExamplesintheWild'></a>Examples in the Wild
-
-* [Example doing it in code loop](https://github.com/jupyter-naas/awesome-notebooks/blob/1a6cc24f0777e5d951ce94aebe0c5dbd470e7880/spaCy/SpaCy_Build_a_sentiment_analysis_model_using_Twitter.ipynb) via juypyter-naas awesome-notebooks
-
-### <a name='OfficialspaCyExplosioncontent'></a>Official spaCy/Explosion content
-
-You want to make sure you are looking at their [projects](https://github.com/explosion/projects) folder on github.
-
-* spaCy example project in [their demos](https://github.com/explosion/projects/tree/v3/pipelines/textcat_demo) - binary
-* [spaCy demo project for multilabel classification](https://github.com/explosion/projects/tree/v3/pipelines/textcat_multilabel_demo)
-* Tutorial on [labeling and classifying doc issues](https://github.com/explosion/projects/tree/v3/tutorials/textcat_docs_issues)
-* Tutorial on [sentiment classification with textcat](https://github.com/explosion/projects/tree/v3/tutorials/textcat_goemotions)
-
 ## <a name='EntityRules'></a>Entity Rules 
 
 [Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
@@ -223,11 +228,11 @@ Still in experimental, it seems to me pretty good. Stay tuned for more on using 
 
 FYI, you need to look for it in spacy-experimental, under ["releases."](https://github.com/explosion/spacy-experimental/releases)
 
-### Merge Coref Ents in Spacy
+### <a name='MergeCorefEntsinSpacy'></a>Merge Coref Ents in Spacy
 
 Merging coreference entities in spacy (a fast hack but useful: "This code snippet shows how to use spaCy's coreference resolution component to resolve references in text. The function shown below is a simple approach and does not support cases like overlapping spans."): [link](https://gist.github.com/thomashacker/b5dd6042c092e0a22c2b9243a64a2466)
 
-### Pipeline function to add corefs to the Doc
+### <a name='PipelinefunctiontoaddcorefstotheDoc'></a>Pipeline function to add corefs to the Doc
 
 A function to add all the corefs from the experimental coref model to the doc in a pipeline
 
