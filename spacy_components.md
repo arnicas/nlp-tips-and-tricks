@@ -9,7 +9,7 @@
     - [Examples in the Wild](#examples-in-the-wild)
     - [Official spaCy/Explosion content](#official-spacyexplosion-content)
     - [Overriding a Textcat Classification With Entity Rules](#overriding-a-textcat-classification-with-entity-rules)
-  - [Entity Rules](#entity-rules)
+  - [Entity Rules and Libs](#entity-rules-and-libs)
   - [Coreference Model](#coreference-model)
     - [Merge Coref Ents in Spacy](#merge-coref-ents-in-spacy)
     - [Pipeline function to add corefs to the Doc](#pipeline-function-to-add-corefs-to-the-doc)
@@ -23,9 +23,6 @@
 <!-- /vscode-markdown-toc -->
 
 # SpaCy Tricks and Examples
-
-A growing list of useful links and tips.
-
 
 ## <a name='UsefulPipelineComponentsCode'></a>Useful Pipeline Components Code
 
@@ -71,7 +68,7 @@ def unpossess_entities(doc):
 ```
 
 
-### Remove uncapped "The"
+### <a name='RemoveuncappedThe'></a>Remove uncapped "The"
 
 
 Remove uncapped "the":
@@ -216,11 +213,18 @@ London GPE
 Artgerm PERSON
 ```
 
-## <a name='EntityRules'></a>Entity Rules 
+## <a name='EntityRulesandLibs'></a>Entity Rules and Libs
 
-[Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
-
+* [Video overview of Entity Linking in SpaCy by Sophie Van Landeghem](Sofie Van Landeghem: Entity linking functionality in spaCy (spaCy IRL 2019).
 * [SpaCy docs on the Entity Ruler](https://spacy.io/usage/rule-based-matching#entityruler) -- which is how I overrode names of porn actors in my classifier example.
+* [Use NER or a phrase matcher/rule approach](https://support.prodi.gy/t/ner-or-phrasematcher/686)? An FAQ.
+
+Third Party:
+
+* [extractacy](https://github.com/jenojp/extractacy) - a pattern based entity extractor lib for spaCy
+* A list of [country patterns for spacy](https://github.com/explosion/prodigy-recipes/blob/master/example-patterns/patterns_countries-GPE.jsonl)
+* A [good article](https://towardsdatascience.com/clinical-named-entity-recognition-using-spacy-5ae9c002e86f) by Yu Huang on using rules for medical clinical entity content to update an NER model. "In this method, first a set of medical entities and types was identified, then a spaCy entity ruler model was created and used to automatically generating annotated text dataset for model training and testing, after that a spaCy NER model was created and trained, and finally the same entity ruler model was used to extend the capability of the trained NER model."
+* [Implementing Hearst Patterns with SpaCy](https://towardsdatascience.com/implementing-hearst-patterns-with-spacy-216e585f61f8).
 
 ## <a name='CoreferenceModel'></a>Coreference Model
 
