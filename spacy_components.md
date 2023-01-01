@@ -13,8 +13,8 @@
   - [Coreference Model](#coreference-model)
     - [Merge Coref Ents in Spacy](#merge-coref-ents-in-spacy)
     - [Pipeline function to add corefs to the Doc](#pipeline-function-to-add-corefs-to-the-doc)
-  - [SpaCy Resource Links](#spacy-resource-links)
-    - [SpaCy articles of use to me](#spacy-articles-of-use-to-me)
+  - [Explosion's SpaCy Resource Links](#explosions-spacy-resource-links)
+    - [SpaCy Articles of Use](#spacy-articles-of-use)
 
 <!-- vscode-markdown-toc-config
 	numbering=false
@@ -169,6 +169,11 @@ You want to make sure you are looking at their [projects](https://github.com/exp
 
 ### <a name='OverridingaTextcatClassificationWithEntityRules'></a>Overriding a Textcat Classification With Entity Rules
 
+Sometimes you want to combine rules with probabilistic models.  Your model might be fragile or incomplete, and you want to be **sure** you catch something with a hard score.
+This is how you can set or reset a text classification in a spaCy pipeline.
+
+(FYI you might also like Jeremy Jordan's [normconf video](https://www.youtube.com/watch?v=gXe9iXNTuDc) on combining rules and ML models.)
+
 ```
 from spacy.language import Language
 
@@ -255,7 +260,7 @@ def get_corefs(doc):
     return doc
 ```
 
-## <a name='SpaCyResourceLinks'></a>SpaCy Resource Links
+## <a name='SpaCyResourceLinks'></a>Explosion's SpaCy Resource Links
 
 
 * [Website](https://spacy.io/usage)
@@ -264,8 +269,9 @@ def get_corefs(doc):
 * The gigantic scary [flowchart of NER workflow decision points](https://github.com/explosion/assets/blob/main/Prodigy/Prodigy_NER_flowchart_v2_0_0_light.pdf) which is very useful
 * [Prodigy](https://prodi.gy/), their customizable labeling tool with an active Support forum and integration with spaCy
 * The [Advanced SpaCy online web course](https://course.spacy.io/en/) (which I should redo)
-* Tailored analysis/pipelines and [consulting help](https://explosion.ai/custom-solutions) -- this is a thing I would use myself, they are nice (link)\
+* Tailored analysis/pipelines and [consulting help](https://explosion.ai/custom-solutions) -- this is a thing I would use myself, they are nice (link)
 
-### <a name='SpaCyarticlesofusetome'></a>SpaCy articles of use to me
+
+### <a name='SpaCyarticlesofusetome'></a>SpaCy Articles of Use
 
 * [Making the Most of Spacy's Rule-Based Matcher](https://pmbaumgartner.github.io/blog/spacy-rule-based-matcher-workflow/), by Peter Baumgartner
