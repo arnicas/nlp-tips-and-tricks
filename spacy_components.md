@@ -157,6 +157,7 @@ Note that after you do the "initialize" you can still add rules.  The rules will
 ### <a name='ExamplesintheWild'></a>Examples in the Wild
 
 * [Example doing it in code loop](https://github.com/jupyter-naas/awesome-notebooks/blob/1a6cc24f0777e5d951ce94aebe0c5dbd470e7880/spaCy/SpaCy_Build_a_sentiment_analysis_model_using_Twitter.ipynb) via juypyter-naas awesome-notebooks
+* Tutorial on pipeline method: [Building a Text Classifier with Spacy 3](https://medium.com/analytics-vidhya/building-a-text-classifier-with-spacy-3-0-dd16e9979a) by Phil S.
 
 ### <a name='OfficialspaCyExplosioncontent'></a>Official spaCy/Explosion content
 
@@ -170,7 +171,7 @@ You want to make sure you are looking at their [projects](https://github.com/exp
 ### <a name='OverridingaTextcatClassificationWithEntityRules'></a>Overriding a Textcat Classification With Entity Rules
 
 Sometimes you want to combine rules with probabilistic models.  Your model might be fragile or incomplete, and you want to be **sure** you catch something with a hard score.
-This is how you can set or reset a text classification in a spaCy pipeline.
+This is how you can set or reset a text classification in a spaCy pipeline. (Note, I wrote this up on [Medium](https://medium.com/@lynn-72328/using-rules-with-a-spacy-textcat-classifier-for-nsfw-content-26ca417611a) too.)
 
 (FYI you might also like Jeremy Jordan's [normconf video](https://www.youtube.com/watch?v=gXe9iXNTuDc) on combining rules and ML models.)
 
